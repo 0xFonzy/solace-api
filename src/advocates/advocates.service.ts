@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, ArrayOverlap, FindOptionsWhere } from 'typeorm';
+import { Repository, ArrayOverlap, FindOptionsWhere, ILike } from 'typeorm';
 import { Advocate } from './advocate.entity';
 import { SearchAdvocatesDto } from './dto/search-advocates.dto';
 
@@ -12,20 +12,31 @@ export class AdvocatesService {
   ) {}
 
   async searchAdvocates(searchDto: SearchAdvocatesDto): Promise<Advocate[]> {
-    const { city, specialties } = searchDto;
+    const { city, specialties, name } = searchDto;
 
-    const option: FindOptionsWhere<Advocate> = {};
+    const baseWhere: FindOptionsWhere<Advocate> = {};
 
     if (city) {
-      option.city = city;
+      baseWhere.city = city;
     }
 
     if (specialties && specialties.length > 0) {
-      option.specialties = ArrayOverlap(specialties);
+      baseWhere.specialties = ArrayOverlap(specialties);
     }
 
+    // If we have a name search, we need to use OR condition between firstName and lastName
+    if (name) {
+      return this.advocatesRepository.find({
+        where: [
+          { ...baseWhere, firstName: ILike(`%${name}%`) },
+          { ...baseWhere, lastName: ILike(`%${name}%`) },
+        ],
+      });
+    }
+
+    // If no name search, use the base where clause
     return this.advocatesRepository.find({
-      where: option,
+      where: baseWhere,
     });
   }
 }

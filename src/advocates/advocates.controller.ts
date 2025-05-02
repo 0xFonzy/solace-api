@@ -20,16 +20,20 @@ export class AdvocatesController {
     type: [Advocate],
   })
   async searchAdvocates(
+    @Query('name') name?: string,
     @Query('city') city?: City,
     @Query('specialties', {
       transform: (value: string | string[]) =>
         (Array.isArray(value) ? value : [value]).filter(Boolean),
     })
     specialties?: Specialty[],
-    @Query('name') name?: string,
   ): Promise<Advocate[]> {
     try {
-      return this.advocatesService.searchAdvocates({ city, specialties, name });
+      return this.advocatesService.searchAdvocates({
+        city,
+        specialties,
+        name,
+      });
     } catch (error) {
       console.error('Search Advocates Error: ', error);
       throw new BadRequestException('Invalid request');
