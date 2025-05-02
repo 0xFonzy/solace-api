@@ -1,4 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Specialty } from './constants/specialty.constants';
+import { City } from './constants/city.constants';
 
 @Entity('advocates')
 export class Advocate {
@@ -11,14 +13,14 @@ export class Advocate {
   @Column()
   lastName: string;
 
-  @Column()
-  city: string;
+  @Column({ type: 'enum', enum: City })
+  city: City;
 
   @Column()
   degree: string;
 
-  @Column('text', { array: true })
-  specialties: string[];
+  @Column('enum', { enum: Specialty, array: true })
+  specialties: Specialty[];
 
   @Column()
   yearsOfExperience: number;
@@ -28,4 +30,7 @@ export class Advocate {
 
   @Column()
   imageUrl: string;
+
+  @Column()
+  gender: string;
 }
