@@ -1,15 +1,20 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Advocate } from '../advocate.entity';
-import { City } from '../constants/city.constants';
+import { City, CityDisplayLabels } from '../constants/city.constants';
 import {
   Specialty,
   SpecialtyDisplayLabels,
 } from '../constants/specialty.constants';
 
-interface SpecialtyOption {
+type CityOption = {
+  value: City;
+  label: string;
+};
+
+type SpecialtyOption = {
   value: Specialty;
   label: string;
-}
+};
 
 export class AdvocateResponseDto {
   @ApiProperty()
@@ -25,7 +30,7 @@ export class AdvocateResponseDto {
   phoneNumber: string;
 
   @ApiProperty({ enum: City })
-  city: City;
+  city: CityOption;
 
   @ApiProperty()
   degree: string;
@@ -50,7 +55,10 @@ export class AdvocateResponseDto {
     this.firstName = advocate.firstName;
     this.lastName = advocate.lastName;
     this.phoneNumber = advocate.phoneNumber;
-    this.city = advocate.city;
+    this.city = {
+      value: advocate.city,
+      label: CityDisplayLabels[advocate.city],
+    };
     this.degree = advocate.degree;
     this.specialties = advocate.specialties.map((specialty) => ({
       value: specialty,
