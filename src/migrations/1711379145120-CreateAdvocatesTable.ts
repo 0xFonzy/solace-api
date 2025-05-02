@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class CreateAdvocatesTable1711378245120 implements MigrationInterface {
-  name = 'CreateAdvocatesTable1711378245120';
+export class CreateAdvocatesTable1711379145120 implements MigrationInterface {
+  name = 'CreateAdvocatesTable1711379145120';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     // Enable the uuid-ossp extension first
@@ -12,12 +12,13 @@ export class CreateAdvocatesTable1711378245120 implements MigrationInterface {
                 "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
                 "firstName" character varying NOT NULL,
                 "lastName" character varying NOT NULL,
-                "city" character varying NOT NULL,
+                "city" city NOT NULL,
                 "degree" character varying NOT NULL,
-                "specialties" text[] NOT NULL,
+                "specialties" specialty[] NOT NULL,
                 "yearsOfExperience" integer NOT NULL,
                 "phoneNumber" character varying NOT NULL,
-                "imageUrl" character varying NOT NULL
+                "imageUrl" character varying NOT NULL,
+                "gender" character varying NOT NULL
             )
         `);
   }
