@@ -51,6 +51,7 @@ export class AdvocateResponseDto {
     this.lastName = advocate.lastName;
     this.phoneNumber = advocate.phoneNumber;
     this.city = advocate.city;
+    this.degree = advocate.degree;
     this.specialties = advocate.specialties.map((specialty) => ({
       value: specialty,
       label: SpecialtyDisplayLabels[specialty],
